@@ -1,0 +1,52 @@
+# Configuration commune à tous les microservices
+
+# Eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.uuid}
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# Resilience
+spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    circuit-breaker:
+      resilience4j:
+        enabled: true
+  
+  # Base de données commune
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  
+  # Configuration commune pour les uploads
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Logging commun
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.cloud: INFO
+    org.hibernate: INFO
